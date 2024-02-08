@@ -17,11 +17,11 @@ public class BoardController {
         return boardService.createBoard(token, requestDto);
     }
 
-//    @PutMapping("/update/{boardId}")
-//    public BoardResponseDto updateBoard(@RequestHeader(value = "Authorization") String token, @PathVariable Long boardId, @Valid @RequestBody BoardRequestDto requestDto) {
-//        return boardService.updateBoard(token, boardId, requestDto);
-//    }
-//
+    @PutMapping("/update/{boardId}")
+    public BoardResponseDto updateBoard(@RequestHeader(value = "Authorization") String token, @PathVariable Long boardId, @Valid @RequestBody BoardRequestDto requestDto) {
+        return boardService.updateBoard(token, boardId, requestDto);
+    }
+
 //    @DeleteMapping("/delete/{boardId}")
 //    public String deleteBoard(@RequestHeader(value = "Authorization") String token, @PathVariable Long boardId) {
 //        return boardService.deleteBoard(token, boardId);

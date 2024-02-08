@@ -38,34 +38,26 @@ public class BoardService {
         );
     }
 
-//    @Transactional
-//    public BoardResponseDto createBoard(String tokenValue, BoardRequestDto requestDto) {
-//        // 사용자 아이디
-//        Claims email;
-//
-//        String token = jwtUtil.substringToken(tokenValue);
-//
-//        // 토큰 검증 및 정보 가져오기
-//        if (jwtUtil.validateToken(token)) {
-//            email = jwtUtil.getUserInfoFromToken(token);
-//        } else {
-//            throw new IllegalArgumentException("검증되지 않은 유저 입니다.");
-//        }
-//
-////        // 유저가 있는지 확인
-//        User user = userRepository.findByEmail(email).orElseThrow(
-//                () -> new IllegalArgumentException("해당 유저가 없습니다.")
-//        );
-//
-//        Board board = new Board(requestDto.getTitle(), requestDto.getContent(), user);
-//
-//        Board savedBoard = boardRepository.save(board);
-//
-//        BoardResponseDto boardResponseDto = new BoardResponseDto(savedBoard.getTitle(), savedBoard.getContent(), email);
-//
-//        return boardResponseDto;
-//   //     return null;
-//    }
+    @Transactional
+    public BoardResponseDto updateBoard(String accessToken, Long id, BoardRequestDto requestDto) {
+        String email = jwtUtil.getEmailFromToken(accessToken);
+        User user = findUserBy(email);
+        Board board = getBoardByEmail(user, id);
+        board.update(requestDto);
+
+
+        return new BoardResponseDto(board);
+    }
+
+    private Board getBoardByEmail(User user, Long id) {
+        return user.getBoards().stream()
+                .filter(
+                        boards -> boards.getBoardId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("작성자만 삭제/수정 할 수 있습니다.")
+                );
+    }
+
 
 //    @Transactional
 //    public BoardResponseDto updateBoard(String tokenValue, Long boardId, BoardRequestDto requestDto) {
