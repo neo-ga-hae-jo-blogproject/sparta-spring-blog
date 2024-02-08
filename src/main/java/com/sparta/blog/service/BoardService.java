@@ -58,75 +58,16 @@ public class BoardService {
                 );
     }
 
+    @Transactional
+    public String deleteBoard(String accessToken, Long id) {
+        String email = jwtUtil.getEmailFromToken(accessToken);
+        User user = findUserBy(email);
+        Board board = getBoardByEmail(user, id);
 
-//    @Transactional
-//    public BoardResponseDto updateBoard(String tokenValue, Long boardId, BoardRequestDto requestDto) {
-//        // 사용자 아이디
-//        Claims email;
-//
-//        String token = jwtUtil.substringToken(tokenValue);
-//
-//        // 토큰 검증 및 정보 가져오기
-//        if (jwtUtil.validateToken(token)) {
-//            email = jwtUtil.getUserInfoFromToken(token);
-//        } else {
-//            throw new IllegalArgumentException("검증되지 않은 유저 입니다.");
-//        }
-//
-//        // 유저가 있는지 확인
-//        User user = userRepository.findByEmail(email).orElseThrow(
-//                () -> new IllegalArgumentException("해당 유저가 없습니다.")
-//        );
-//
-//        // 해당 게시글이 DB에 있는지 확인
-//        Board board = boardRepository.findById(boardId).orElseThrow(
-//                () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
-//        );
-//
-//        // 본인이 작성한 글인지 확인
-//        if(!board.getUser().getEmail().equals(email)) {
-//            throw new IllegalArgumentException("본인이 작성한 글만 수정 가능합니다.");
-//        }
-//
-//        board.update(requestDto);
-//
-//        return new BoardResponseDto(board);
-//     //   return null;
-//    }
-//
-//    @Transactional
-//    public String deleteBoard(String tokenValue, Long boardId) {
-//        // 사용자 아이디
-//        Claims email;
-//
-//        String token = jwtUtil.substringToken(tokenValue);
-//
-//        // 토큰 검증 및 정보 가져오기
-//        if (jwtUtil.validateToken(token)) {
-//            email = jwtUtil.getUserInfoFromToken(token);
-//        } else {
-//            throw new IllegalArgumentException("검증되지 않은 유저 입니다.");
-//        }
-//
-////        // 유저가 있는지 확인
-//        User user = userRepository.findByEmail(email).orElseThrow(
-//                () -> new IllegalArgumentException("해당 유저가 없습니다.")
-//        );
-//
-//        // 해당 게시글이 DB에 있는지 확인
-//        Board board = boardRepository.findById(boardId).orElseThrow(
-//                () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다.")
-//        );
-//
-//        // 본인이 작성한 글인지 확인
-//        if(!board.getUser().getEmail().equals(email)) {
-//            throw new IllegalArgumentException("본인이 작성한 글만 삭제 가능합니다.");
-//        }
-//
-//        boardRepository.delete(board);
-//
-//        return "게시글 삭제 완료";
-//    }
+        boardRepository.delete(board);
+
+        return "게시글 삭제 완료";
+    }
 }
 
 

@@ -22,10 +22,10 @@ public class BoardController {
         return boardService.updateBoard(token, boardId, requestDto);
     }
 
-//    @DeleteMapping("/delete/{boardId}")
-//    public String deleteBoard(@RequestHeader(value = "Authorization") String token, @PathVariable Long boardId) {
-//        return boardService.deleteBoard(token, boardId);
-//    }
+    @DeleteMapping("/delete/{boardId}")
+    public String deleteBoard(@RequestHeader(value = "Authorization") String token, @PathVariable Long boardId) {
+        return boardService.deleteBoard(token, boardId);
+    }
 }
 
 
