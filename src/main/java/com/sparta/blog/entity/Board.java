@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -19,7 +22,10 @@ public class Board extends Timestamped {
     @Column(name = "content", nullable = false)
     private String content;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "boards", cascade = CascadeType.REMOVE)
+    private List<Comment> commentList = new ArrayList<>();
 }
