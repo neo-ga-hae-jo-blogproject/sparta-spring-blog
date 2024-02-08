@@ -1,5 +1,6 @@
 package com.sparta.blog.entity;
 
+import com.sparta.blog.dto.BoardRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,15 +12,24 @@ import lombok.NoArgsConstructor;
 public class Board extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long boardId;
 
-    @Column(name = "title", nullable = false)
+    @Column(nullable = false)
     private String title;
 
-    @Column(name = "content", nullable = false)
+    @Column(nullable = false)
     private String content;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name = "id")
+    private User user;
+
+    public Board(BoardRequestDto requestDto, User user) {
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.user = user;
+    }
+    public void update(BoardRequestDto requestDto) {
+
+    }
 }

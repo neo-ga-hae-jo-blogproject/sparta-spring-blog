@@ -87,4 +87,13 @@ public class JwtUtil {
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
+
+    public String getEmailFromToken(String bearerToken) {
+        String token = substringToken(bearerToken);
+        if (validateToken((token))) {
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody()
+                    .getSubject();
+        }
+        throw new IllegalArgumentException("값을 찾을 수 없습니다.");
+    }
 }
