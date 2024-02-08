@@ -19,13 +19,13 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public CommentResponseDto review(@PathVariable(name = "boardId") Long boardId, @RequestParam CommentRequestDto commentRequestDto) {
+    public CommentResponseDto review(@PathVariable(name = "boardId") Long boardId, @RequestBody CommentRequestDto commentRequestDto) {
         CommentResponseDto commentResponseDto = commentService.review(commentRequestDto, boardId);
         return commentResponseDto;
     }
 
     @PutMapping("/update/{commentId}")
-    public CommentResponseDto updateComment(@PathVariable(name = "commentId") Long commentId, @RequestParam CommentRequestDto commentRequestDto) {
+    public CommentResponseDto updateComment(@PathVariable(name = "commentId") Long commentId, @RequestBody CommentRequestDto commentRequestDto) {
         CommentResponseDto commentResponseDto = commentService.updateComment(commentRequestDto, commentId);
         return commentResponseDto;
     }
