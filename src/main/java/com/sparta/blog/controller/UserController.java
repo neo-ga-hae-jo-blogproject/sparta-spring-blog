@@ -4,6 +4,7 @@ import com.sparta.blog.dto.UserRequestDto;
 import com.sparta.blog.dto.CommonResponseDto;
 import com.sparta.blog.jwt.JwtUtil;
 import com.sparta.blog.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -33,6 +34,20 @@ public class UserController {
         } catch (IllegalArgumentException exception) {
             return ResponseEntity.badRequest().body(new CommonResponseDto("중복된 이메일 입니다.", HttpStatus.BAD_REQUEST.value()));
         }
+    }
+
+
+    @PostMapping("/signin")
+    public ResponseEntity<CommonResponseDto> login(@RequestBody UserRequestDto userRequestDto, HttpServletResponse response) {
+        try {
+            userService.login(userRequestDto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+
+        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(userRequestDto.getEmail()));
+
+        return ResponseEntity.ok().body(new CommonResponseDto("로그인 성공", HttpStatus.OK.value()));
     }
 
 

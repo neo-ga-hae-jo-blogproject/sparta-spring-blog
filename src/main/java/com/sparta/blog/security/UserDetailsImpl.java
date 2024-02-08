@@ -2,6 +2,7 @@ package com.sparta.blog.security;
 
 import com.sparta.blog.entity.User;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

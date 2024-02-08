@@ -27,4 +27,16 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void login(UserRequestDto userRequestDto) {
+        String email = userRequestDto.getEmail();
+        String password = userRequestDto.getPassword();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("등록된 유저가 없습니다."));
+
+        if(!passwordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+    }
+
 }
