@@ -16,5 +16,18 @@ public class Comment {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private Long boardId;
 
+    @Column(nullable = false)
+    private Long userId;
+
+    public Comment(String content, Long boardId) {
+        this.content = content;
+        this.boardId = boardId;
+    }
+
+    public void updateContent(String updateContent) {
+        this.content = updateContent;
+    }
 }
