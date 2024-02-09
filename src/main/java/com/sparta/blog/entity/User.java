@@ -35,4 +35,6 @@ public class User {
         this.username = username;
         this.info = info;
     }
+
+
 }

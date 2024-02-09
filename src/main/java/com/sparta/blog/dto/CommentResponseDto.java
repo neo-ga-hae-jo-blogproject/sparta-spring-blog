@@ -7,7 +7,8 @@ public class CommentResponseDto {
     private String content;
     private String writer;
 
-    public CommentResponseDto(String content) {
+    public CommentResponseDto(String content,String writer) {
         this.content = content;
+        this.writer =writer;
     }
 }
