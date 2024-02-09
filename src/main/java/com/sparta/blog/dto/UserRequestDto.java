@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserRequestDto {
-    @Pattern(regexp = "^[a-zA-Z0-9]+@[a-zA-Z0-9.-]+\\.(com)$", message = "유효하지 않은 이메일 형식입니다.")
+    @Pattern(regexp = "^[a-zA-Z0-9]+@[a-zA-Z0-9.-]+\\.(com)$")
     private String email;
 
     @Pattern(regexp = "^[a-zA-Z0-9]{8,15}$")
