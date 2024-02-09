@@ -21,7 +21,7 @@ public class Board extends Timestamped {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Board(BoardRequestDto requestDto, User user) {

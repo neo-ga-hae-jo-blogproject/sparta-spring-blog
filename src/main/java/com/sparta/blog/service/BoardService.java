@@ -24,14 +24,15 @@ public class BoardService {
 
     @Transactional
     public BoardResponseDto createBoard(String accessToken, BoardRequestDto requestDto) {
-        String email = jwtUtil.getEmailFromToken(accessToken);
-        User user = findUserBy(email);
+        User user = findByToken(accessToken);
         Board board = new Board(requestDto, user);
 
         return new BoardResponseDto(boardRepository.save(board));
     }
 
-    private User findUserBy(String email) {
+    private User findByToken(String accessToken) {
+        String email = jwtUtil.getEmailFromToken(accessToken);
+
         return userRepository.findByEmail(email).orElseThrow(
                 () -> new NoSuchElementException("사용자를 찾을 수 없습니다.")
         );
@@ -39,16 +40,15 @@ public class BoardService {
 
     @Transactional
     public BoardResponseDto updateBoard(String accessToken, Long id, BoardRequestDto requestDto) {
-        String email = jwtUtil.getEmailFromToken(accessToken);
-        User user = findUserBy(email);
-        Board board = getBoardByEmail(user, id);
+        User user = findByToken(accessToken);
+        Board board = getBoardByUser(user, id);
         board.update(requestDto);
 
 
         return new BoardResponseDto(board);
     }
 
-    private Board getBoardByEmail(User user, Long id) {
+    private Board getBoardByUser(User user, Long id) {
         return user.getBoards().stream()
                 .filter(
                         boards -> boards.getBoardId().equals(id))
@@ -59,9 +59,8 @@ public class BoardService {
 
     @Transactional
     public String deleteBoard(String accessToken, Long id) {
-        String email = jwtUtil.getEmailFromToken(accessToken);
-        User user = findUserBy(email);
-        Board board = getBoardByEmail(user, id);
+        User user = findByToken(accessToken);
+        Board board = getBoardByUser(user, id);
 
         boardRepository.delete(board);
 
