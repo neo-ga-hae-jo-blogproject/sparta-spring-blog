@@ -1,15 +1,13 @@
 package com.sparta.blog.security;
 
 import com.sparta.blog.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
     private final User user;
 
