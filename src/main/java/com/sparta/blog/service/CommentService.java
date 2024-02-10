@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -23,36 +25,35 @@ public class CommentService {
     public CommentResponseDto review(CommentRequestDto commentRequestDto,Long boardId,String token){
         User user = getUserByToken(token);
 
-        Comment comment = new Comment(commentRequestDto.getContent(), boardId, user);
+        Comment comment = new Comment(commentRequestDto.getContent(), boardId, user.getId());
         commentRepository.save(comment);
-        return new CommentResponseDto(comment.getContent(), comment.getUsername());
+        return new CommentResponseDto(comment.getContent(), user.getUsername());
     }
 
 
     public CommentResponseDto updateComment(CommentRequestDto commentRequestDto,Long commentId, String token){
-        Comment comment = commentRepository.findById(commentId).orElseThrow();
-
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("등록된 댓글이 아닙니다."));
         User user = getUserByToken(token);
 
         //자신이 작성한 댓글인지 아닌지 확인
-        isCommentMyself(user, comment);
+        isCommentMyselfValidate(user, comment);
 
         comment.updateContent(commentRequestDto.getContent());
-        return new CommentResponseDto(comment.getContent(), comment.getUsername());
+        return new CommentResponseDto(comment.getContent(), user.getUsername());
     }
 
     public void deleteComment(Long commentId,String token){
-        Comment comment = commentRepository.findById(commentId).orElseThrow();
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("등록된 댓글이 아닙니다."));
 
         User user = getUserByToken(token);
 
-        isCommentMyself(user, comment);
+        isCommentMyselfValidate(user, comment);
 
         commentRepository.delete(comment);
     }
 
-    private static void isCommentMyself(User user, Comment comment) {
-        if(!user.equals(comment.getUser())){
+    private void isCommentMyselfValidate(User user, Comment comment) {
+        if(!(Objects.equals(user.getId(), comment.getUserId()))){
             throw new IllegalArgumentException("자신이 작성한 댓글이 아닙니다.");
         }
     }

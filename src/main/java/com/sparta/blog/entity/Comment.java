@@ -20,21 +20,16 @@ public class Comment {
     private Long boardId;
 
     @Column(nullable = false)
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private User user;
+    private Long userId;
 
-    public Comment(String content, Long boardId,User user) {
+    public Comment(String content, Long boardId,Long userId) {
         this.content = content;
         this.boardId = boardId;
-        this.user = user;
+        this.userId = userId;
     }
 
     public void updateContent(String updateContent) {
         this.content = updateContent;
     }
 
-    public String getUsername(){
-        return user.getUsername();
-    }
 }
