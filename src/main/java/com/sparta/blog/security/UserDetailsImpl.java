@@ -1,20 +1,17 @@
 package com.sparta.blog.security;
 
 import com.sparta.blog.entity.User;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+@RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
-    @Getter
     private final User user;
 
-    public UserDetailsImpl(User user) {
-        this.user = user;
-    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
