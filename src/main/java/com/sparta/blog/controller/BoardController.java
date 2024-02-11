@@ -1,16 +1,31 @@
 package com.sparta.blog.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.sparta.blog.dto.BoardRequestDto;
+import com.sparta.blog.dto.BoardResponseDto;
+import com.sparta.blog.service.BoardService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/boards")
 public class BoardController {
-//    @PostMapping("/create")
-//    public ResponseEntity<String> createBoard(@RequestHeader(value = "Authorization") String token, )
+    private final BoardService boardService;
+    @PostMapping("/create")
+    public BoardResponseDto createBoard(@RequestHeader(value = "Authorization") String token, @Valid @RequestBody BoardRequestDto requestDto) {
+        return boardService.createBoard(token, requestDto);
+    }
+
+    @PutMapping("/update/{boardId}")
+    public BoardResponseDto updateBoard(@RequestHeader(value = "Authorization") String token, @PathVariable Long boardId, @Valid @RequestBody BoardRequestDto requestDto) {
+        return boardService.updateBoard(token, boardId, requestDto);
+    }
+
+    @DeleteMapping("/delete/{boardId}")
+    public String deleteBoard(@RequestHeader(value = "Authorization") String token, @PathVariable Long boardId) {
+        return boardService.deleteBoard(token, boardId);
+    }
 }
+
+
