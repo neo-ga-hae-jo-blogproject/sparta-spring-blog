@@ -16,11 +16,6 @@ public class Comment {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    private Long boardId;
-
-    @Column(nullable = false)
-    private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
@@ -30,10 +25,10 @@ public class Comment {
     @JoinColumn(name = "board_id")
     private Board boards;
 
-    public Comment(String content, Long boardId,Long userId) {
+    public Comment(String content, Board board,User user) {
         this.content = content;
-        this.boardId = boardId;
-        this.userId = userId;
+        this.boards = board;
+        this.user =user;
     }
 
     public void updateContent(String updateContent) {

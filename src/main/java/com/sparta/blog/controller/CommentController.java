@@ -20,14 +20,12 @@ public class CommentController {
 
     @PostMapping
     public CommentResponseDto review(@RequestHeader(value = "Authorization") String token, @PathVariable(name = "boardId") Long boardId, @RequestBody CommentRequestDto commentRequestDto) {
-        CommentResponseDto commentResponseDto = commentService.review(commentRequestDto, boardId, token);
-        return commentResponseDto;
+        return commentService.review(commentRequestDto, boardId, token);
     }
 
     @PutMapping("/{commentId}/update")
     public CommentResponseDto updateComment(@RequestHeader(value = "Authorization") String token, @PathVariable(name = "commentId") Long commentId, @RequestBody CommentRequestDto commentRequestDto) {
-        CommentResponseDto commentResponseDto = commentService.updateComment(commentRequestDto, commentId,token);
-        return commentResponseDto;
+        return commentService.updateComment(commentRequestDto, commentId,token);
     }
 
     @DeleteMapping("/{commentId}/delete")
