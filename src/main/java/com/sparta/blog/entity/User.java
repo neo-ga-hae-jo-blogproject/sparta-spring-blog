@@ -1,25 +1,24 @@
 package com.sparta.blog.entity;
 
-
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "users")
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -31,9 +30,11 @@ public class User {
     @Column(nullable = false)
     private String info;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<Board> boards = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private final List<Board> boards = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private final List<Comment> commentList = new ArrayList<>();
     @Builder
     public User(String email, String password, String username, String info) {
         this.email = email;
@@ -41,6 +42,5 @@ public class User {
         this.username = username;
         this.info = info;
     }
-
 
 }

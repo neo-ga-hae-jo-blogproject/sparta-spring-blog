@@ -87,7 +87,6 @@ public class JwtUtil {
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
-
     public String getEmailFromToken(String bearerToken) {
         String token = substringToken(bearerToken);
         if (validateToken((token))) {

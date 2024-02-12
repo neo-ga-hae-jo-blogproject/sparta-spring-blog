@@ -1,17 +1,20 @@
 package com.sparta.blog.service;
 
-import com.sparta.blog.dto.BoardRequestDto;
-import com.sparta.blog.dto.BoardResponseDto;
+import com.sparta.blog.dto.*;
 import com.sparta.blog.entity.Board;
 import com.sparta.blog.entity.User;
 import com.sparta.blog.jwt.JwtUtil;
 import com.sparta.blog.repository.BoardRepository;
+import com.sparta.blog.repository.CommentRepository;
 import com.sparta.blog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+    private final CommentRepository commentRepository;
 
 
     @Transactional
@@ -65,6 +69,28 @@ public class BoardService {
         boardRepository.delete(board);
 
         return "게시글 삭제 완료";
+    }
+
+
+    // 게시물 전체 목록 조회
+    @Transactional(readOnly = true)
+    public List<BoardsResponseDto> getBoardList() {
+        return boardRepository.findAllByOrderByCreatedAtDesc().stream()
+                .map(board -> new BoardsResponseDto(board, new ArrayList<>()))
+                .collect(Collectors.toList());
+    }
+
+    // 특정 게시물 조회
+    @Transactional(readOnly = true)
+    public BoardsResponseDto getBoardDetail(Long id) {
+        Board board = boardRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("글이 존재하지 않습니다.")
+        );
+        List<CommentsResponseDto> commentList = commentRepository.findAllByBoardsId(id)
+                .stream()
+                .map(CommentsResponseDto::new)
+                .collect(Collectors.toList());
+        return new BoardsResponseDto(board, commentList);
     }
 }
 

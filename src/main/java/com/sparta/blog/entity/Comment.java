@@ -22,6 +22,14 @@ public class Comment {
     @Column(nullable = false)
     private Long userId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    private Board boards;
+
     public Comment(String content, Long boardId,Long userId) {
         this.content = content;
         this.boardId = boardId;

@@ -24,6 +24,7 @@ import java.util.Objects;
 @Slf4j(topic = "JWT 검증 및 인가")
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
+
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
     private final ObjectMapper objectMapper;
@@ -33,9 +34,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String token = jwtUtil.resolveToken(request);
 
-
-        if(Objects.nonNull(token)) {
-            if(jwtUtil.validateToken(token)) {
+        if (Objects.nonNull(token)) {
+            if (jwtUtil.validateToken(token)) {
                 Claims info = jwtUtil.getUserInfoFromToken(token);
 
                 // token 검증 -> 인증
@@ -57,6 +57,5 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
-
     }
 }
