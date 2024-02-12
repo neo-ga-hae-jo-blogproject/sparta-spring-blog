@@ -1,5 +1,6 @@
 package com.sparta.blog.service;
 
+import com.sparta.blog.dto.CommonResponseDto;
 import com.sparta.blog.dto.UserRequestDto;
 import com.sparta.blog.dto.UserResponseDto;
 import com.sparta.blog.dto.UserUpdateRequestDto;
@@ -59,16 +60,21 @@ public class UserService {
     @Transactional
     public UserResponseDto updateUserInfo(String token, Long id, UserRequestDto userRequestDto) {
         User user = getUserByToken(token);
+        if (!user.getId().equals(id)) {
+            throw new IllegalArgumentException("현재 로그인한 사용자와 변경하려는 사용자가 일치하지 않습니다.");
+        }
         user.setInfo(userRequestDto.getInfo());
         userRepository.save(user);
         return new UserResponseDto(user);
     }
 
-
     //비밀번호 변경
     @Transactional
     public UserResponseDto updateUserPassword(String token, Long id, UserUpdateRequestDto userUpdateRequestDto) {
         User user = getUserByToken(token);
+        if (!user.getId().equals(id)) {
+            throw new IllegalArgumentException("현재 로그인한 사용자와 변경하려는 사용자가 일치하지 않습니다.");
+        }
 
         if (!passwordEncoder.matches(userUpdateRequestDto.getOldPassword(), user.getPassword())) {
             throw new IllegalArgumentException("현재 비밀번호가 올바르지 않습니다.");
