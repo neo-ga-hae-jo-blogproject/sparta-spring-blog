@@ -55,7 +55,7 @@ public class BoardService {
     private Board getBoardByUser(User user, Long id) {
         return user.getBoards().stream()
                 .filter(
-                        boards -> boards.getBoardId().equals(id))
+                        boards -> boards.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("작성자만 삭제/수정 할 수 있습니다.")
                 );
@@ -73,7 +73,6 @@ public class BoardService {
 
 
     // 게시물 전체 목록 조회
-    @Transactional(readOnly = true)
     public List<BoardsResponseDto> getBoardList() {
         return boardRepository.findAllByOrderByCreatedAtDesc().stream()
                 .map(board -> new BoardsResponseDto(board, new ArrayList<>()))
@@ -81,7 +80,6 @@ public class BoardService {
     }
 
     // 특정 게시물 조회
-    @Transactional(readOnly = true)
     public BoardsResponseDto getBoardDetail(Long id) {
         Board board = boardRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("글이 존재하지 않습니다.")
