@@ -24,13 +24,13 @@ public class CommentController {
         return commentResponseDto;
     }
 
-    @PutMapping("/update/{commentId}")
+    @PutMapping("/{commentId}/update")
     public CommentResponseDto updateComment(@RequestHeader(value = "Authorization") String token, @PathVariable(name = "commentId") Long commentId, @RequestBody CommentRequestDto commentRequestDto) {
         CommentResponseDto commentResponseDto = commentService.updateComment(commentRequestDto, commentId,token);
         return commentResponseDto;
     }
 
-    @DeleteMapping("/delete/{commentId}")
+    @DeleteMapping("/{commentId}/delete")
     public ResponseEntity<CommonResponseDto> deleteComment(@RequestHeader(value = "Authorization") String token, @PathVariable(name = "commentId") Long commentId) {
         try {
             commentService.deleteComment(commentId,token);
