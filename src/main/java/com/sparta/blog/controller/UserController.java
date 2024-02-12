@@ -47,19 +47,14 @@ public class UserController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
-
         response.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(userRequestDto.getEmail()));
-
         return ResponseEntity.ok().body(new CommonResponseDto("로그인 성공", HttpStatus.OK.value()));
     }
-
     //조회
     @GetMapping("/{userId}")
     public UserResponseDto getUserList(@PathVariable Long userId){
         return userService.getUserList(userId);
     }
-
-
     // info 수정
     @PutMapping("/update/info/{userId}")
     public UserResponseDto updateUserInfo(@RequestHeader("Authorization") String token,
@@ -72,7 +67,7 @@ public class UserController {
     @PutMapping("/update/password/{userId}")
     public UserResponseDto updateUserPassword(@RequestHeader("Authorization") String token,
                                                      @PathVariable Long userId,
-                                                     @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
+                                                     @Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
 
         return userService.updateUserPassword(token,userId,userUpdateRequestDto);
     }
