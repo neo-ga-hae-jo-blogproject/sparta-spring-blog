@@ -1,9 +1,13 @@
 package com.sparta.blog.entity;
 
+
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -27,6 +31,9 @@ public class User {
     @Column(nullable = false)
     private String info;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Board> boards = new ArrayList<>();
+
     @Builder
     public User(String email, String password, String username, String info) {
         this.email = email;
@@ -34,5 +41,6 @@ public class User {
         this.username = username;
         this.info = info;
     }
+
 
 }
