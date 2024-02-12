@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 public class Board extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long boardId;
+    @Column(name = "board_id")
+    private Long id;
 
     @Column(nullable = false)
     private String title;

@@ -16,7 +16,7 @@ public class BoardsResponseDto {
     private List<CommentsResponseDto> commentList;
 
     public BoardsResponseDto(Board board, List<CommentsResponseDto> commentList) {
-        this.id=board.getBoardId();
+        this.id = board.getId();
         this.username = board.getUser().getUsername();
         this.title = board.getTitle();
         this.content = board.getContent();
