@@ -1,6 +1,7 @@
-package com.sparta.blog.exception;
+package com.sparta.blog.controller;
 
-import com.sparta.blog.exception.dto.ExceptionDto;
+import com.sparta.blog.exception.PasswordNotMatchedException;
+import com.sparta.blog.commonDto.ExceptionDto;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

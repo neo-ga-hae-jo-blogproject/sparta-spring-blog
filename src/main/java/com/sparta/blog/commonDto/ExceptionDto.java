@@ -1,4 +1,4 @@
-package com.sparta.blog.exception.dto;
+package com.sparta.blog.commonDto;
 
 
 import lombok.Builder;

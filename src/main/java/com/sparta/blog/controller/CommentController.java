@@ -2,7 +2,7 @@ package com.sparta.blog.controller;
 
 import com.sparta.blog.dto.CommentRequestDto;
 import com.sparta.blog.dto.CommentResponseDto;
-import com.sparta.blog.dto.CommonResponseDto;
+import com.sparta.blog.commonDto.CommonResponseDto;
 import com.sparta.blog.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

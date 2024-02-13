@@ -1,16 +1,14 @@
 package com.sparta.blog.controller;
 
+import com.sparta.blog.commonDto.CommonResponseDto;
 import com.sparta.blog.dto.*;
-import com.sparta.blog.entity.User;
 import com.sparta.blog.jwt.JwtUtil;
 import com.sparta.blog.service.UserService;
-import jakarta.persistence.Id;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
