@@ -1,9 +1,6 @@
 package com.sparta.blog.controller;
 
-import com.sparta.blog.dto.CommonResponseDto;
-import com.sparta.blog.dto.UserRequestDto;
-import com.sparta.blog.dto.UserResponseDto;
-import com.sparta.blog.dto.UserUpdateRequestDto;
+import com.sparta.blog.dto.*;
 import com.sparta.blog.entity.User;
 import com.sparta.blog.jwt.JwtUtil;
 import com.sparta.blog.service.UserService;
@@ -43,19 +40,19 @@ public class UserController {
 
 
     @PostMapping("/signin")
-    public ResponseEntity<CommonResponseDto> login(@RequestBody UserRequestDto userRequestDto, HttpServletResponse response, HttpServletRequest request) {
+    public ResponseEntity<CommonResponseDto> login(@RequestBody UserLoginRequestDto userLoginRequestDto, HttpServletResponse response, HttpServletRequest request) {
         try {
             // 이미 로그인된 사용자인지 확인
-            if (userService.isUserLoggedIn(userRequestDto.getEmail(), request)) {
+            if (userService.isUserLoggedIn(userLoginRequestDto.getEmail(), request)) {
                 return ResponseEntity.badRequest().body(new CommonResponseDto("이미 로그인된 사용자입니다.", HttpStatus.BAD_REQUEST.value()));
             }
 
-            userService.login(userRequestDto);
+            userService.login(userLoginRequestDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
 
-        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(userRequestDto.getEmail()));
+        response.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(userLoginRequestDto.getEmail()));
 
         return ResponseEntity.ok().body(new CommonResponseDto("로그인 성공", HttpStatus.OK.value()));
     }

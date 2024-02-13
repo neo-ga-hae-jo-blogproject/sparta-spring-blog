@@ -1,9 +1,6 @@
 package com.sparta.blog.service;
 
-import com.sparta.blog.dto.CommonResponseDto;
-import com.sparta.blog.dto.UserRequestDto;
-import com.sparta.blog.dto.UserResponseDto;
-import com.sparta.blog.dto.UserUpdateRequestDto;
+import com.sparta.blog.dto.*;
 import com.sparta.blog.entity.User;
 import com.sparta.blog.jwt.JwtUtil;
 import com.sparta.blog.repository.UserRepository;
@@ -38,9 +35,9 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void login(UserRequestDto userRequestDto) {
-        String email = userRequestDto.getEmail();
-        String password = userRequestDto.getPassword();
+    public void login(UserLoginRequestDto userLoginRequestDto) {
+        String email = userLoginRequestDto.getEmail();
+        String password = userLoginRequestDto.getPassword();
 
         // 현재 세션에서 이미 로그인된 사용자 확인
         HttpSession session = request.getSession(false);
