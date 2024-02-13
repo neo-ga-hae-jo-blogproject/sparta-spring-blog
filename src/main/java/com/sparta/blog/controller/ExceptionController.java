@@ -2,6 +2,7 @@ package com.sparta.blog.controller;
 
 import com.sparta.blog.exception.PasswordNotMatchedException;
 import com.sparta.blog.commonDto.ExceptionDto;
+import com.sparta.blog.exception.UserNotMatchedException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,12 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(PasswordNotMatchedException.class)
-    public ResponseEntity<ExceptionDto> handlePasswordUnmatchedException(PasswordNotMatchedException e) {
+    public ResponseEntity<ExceptionDto> handlePasswordNotMatchedException(PasswordNotMatchedException e) {
+        return createResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler(UserNotMatchedException.class)
+    public ResponseEntity<ExceptionDto> handleUserNotMatchedException(UserNotMatchedException e) {
         return createResponse(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
