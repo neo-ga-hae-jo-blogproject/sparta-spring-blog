@@ -23,11 +23,11 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
-    private Board boards;
+    private Board board;
 
     public Comment(String content, Board board,User user) {
         this.content = content;
-        this.boards = board;
+        this.board = board;
         this.user =user;
     }
 
