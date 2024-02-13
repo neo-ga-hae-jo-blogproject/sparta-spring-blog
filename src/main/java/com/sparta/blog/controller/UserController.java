@@ -24,7 +24,7 @@ public class UserController {
     private final JwtUtil jwtUtil;
     
 
-    @PostMapping("/signup")
+    @PostMapping("/sign-up")
     public ResponseEntity<Object> signup(@Valid @RequestBody UserRequestDto userRequestDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(new CommonResponseDto("이메일 형식이 유효하지 않습니다.", HttpStatus.BAD_REQUEST.value()));
@@ -39,7 +39,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/signin")
+    @PostMapping("/sign-in")
     public ResponseEntity<CommonResponseDto> login(@RequestBody UserLoginRequestDto userLoginRequestDto, HttpServletResponse response, HttpServletRequest request) {
         try {
             // 이미 로그인된 사용자인지 확인
@@ -57,7 +57,7 @@ public class UserController {
         return ResponseEntity.ok().body(new CommonResponseDto("로그인 성공", HttpStatus.OK.value()));
     }
 
-    @PostMapping("/signout")
+    @PostMapping("/sign-out")
     public ResponseEntity<CommonResponseDto> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
 
