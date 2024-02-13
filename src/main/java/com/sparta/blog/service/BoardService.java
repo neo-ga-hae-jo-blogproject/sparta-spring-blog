@@ -26,6 +26,7 @@ public class BoardService {
     private final CommentRepository commentRepository;
 
 
+
     @Transactional
     public BoardResponseDto createBoard(String accessToken, BoardRequestDto requestDto) {
         User user = findByToken(accessToken);
@@ -73,22 +74,22 @@ public class BoardService {
 
 
     // 게시물 전체 목록 조회
-    public List<BoardsResponseDto> getBoardList() {
+    public List<BoardListResponseDto> getBoardList() {
         return boardRepository.findAllByOrderByCreatedAtDesc().stream()
-                .map(board -> new BoardsResponseDto(board, new ArrayList<>()))
+                .map(board -> new BoardListResponseDto(board, new ArrayList<>()))
                 .collect(Collectors.toList());
     }
 
     // 특정 게시물 조회
-    public BoardsResponseDto getBoardDetail(Long id) {
+    public BoardListResponseDto getBoardDetail(Long id) {
         Board board = boardRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("글이 존재하지 않습니다.")
         );
-        List<CommentsResponseDto> commentList = commentRepository.findAllByBoardsId(id)
+        List<CommentResponseDto> commentList = commentRepository.findAllByBoardsId(id)
                 .stream()
-                .map(CommentsResponseDto::new)
+                .map(CommentResponseDto::new)
                 .collect(Collectors.toList());
-        return new BoardsResponseDto(board, commentList);
+        return new BoardListResponseDto(board, commentList);
     }
 }
 
