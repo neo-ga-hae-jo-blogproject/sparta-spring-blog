@@ -22,10 +22,8 @@ import java.util.stream.Collectors;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
     private final CommentRepository commentRepository;
-
-
+    private final JwtUtil jwtUtil;
 
     @Transactional
     public BoardResponseDto createBoard(String accessToken, BoardRequestDto requestDto) {
@@ -48,7 +46,6 @@ public class BoardService {
         User user = findByToken(accessToken);
         Board board = getBoardByUser(user, id);
         board.update(requestDto);
-
 
         return new BoardResponseDto(board);
     }
@@ -85,7 +82,7 @@ public class BoardService {
         Board board = boardRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("글이 존재하지 않습니다.")
         );
-        List<CommentResponseDto> commentList = commentRepository.findAllByBoardsId(id)
+        List<CommentResponseDto> commentList = commentRepository.findAllByBoardId(id)
                 .stream()
                 .map(CommentResponseDto::new)
                 .collect(Collectors.toList());
