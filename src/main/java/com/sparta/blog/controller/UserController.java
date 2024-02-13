@@ -79,7 +79,7 @@ public class UserController {
         return userService.getUserList(userId);
     }
     // info 수정
-    @PutMapping("/update/info/{userId}")
+    @PutMapping("/{userId}/update-info")
     public UserResponseDto updateUserInfo(@RequestHeader("Authorization") String token,
                                           @PathVariable Long userId,
                                           @Valid @RequestBody UserRequestDto userRequestDto) {
@@ -87,7 +87,7 @@ public class UserController {
     }
 
     // 비밀번호 수정
-    @PutMapping("/update/password/{userId}")
+    @PutMapping("/{userId}/update-password")
     public UserResponseDto updateUserPassword(@RequestHeader("Authorization") String token,
                                                      @PathVariable Long userId,
                                                      @Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto) {

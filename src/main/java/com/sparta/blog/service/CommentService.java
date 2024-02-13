@@ -25,13 +25,14 @@ public class CommentService {
     private final JwtUtil jwtUtil;
 
 
+
     public CommentResponseDto review(CommentRequestDto commentRequestDto,Long boardId,String token){
         User user = getUserByToken(token);
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("없는 게시물 입니다."));
 
         Comment comment = new Comment(commentRequestDto.getContent(), board, user);
         commentRepository.save(comment);
-        return new CommentResponseDto(comment.getContent(), user.getUsername());
+        return new CommentResponseDto(comment);
     }
 
 
@@ -43,7 +44,7 @@ public class CommentService {
         isCommentMyselfValidate(user, comment);
 
         comment.updateContent(commentRequestDto.getContent());
-        return new CommentResponseDto(comment.getContent(), user.getUsername());
+        return new CommentResponseDto(comment);
     }
 
     public void deleteComment(Long commentId,String token){

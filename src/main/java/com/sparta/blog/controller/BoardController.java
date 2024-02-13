@@ -2,7 +2,7 @@ package com.sparta.blog.controller;
 
 import com.sparta.blog.dto.BoardRequestDto;
 import com.sparta.blog.dto.BoardResponseDto;
-import com.sparta.blog.dto.BoardsResponseDto;
+import com.sparta.blog.dto.BoardListResponseDto;
 import com.sparta.blog.service.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +15,13 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
 
-    @GetMapping("/list")
-    public List<BoardsResponseDto> getBoardList(){
+    @GetMapping
+    public List<BoardListResponseDto> getBoardList(){
         return boardService.getBoardList();
     }
 
-    @GetMapping("/list/{id}")
-    public BoardsResponseDto getBoardDetail(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public BoardListResponseDto getBoardDetail(@PathVariable Long id) {
      return boardService.getBoardDetail(id);
     }
 
@@ -30,12 +30,12 @@ public class BoardController {
         return boardService.createBoard(token, requestDto);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}/update")
     public BoardResponseDto updateBoard(@RequestHeader(value = "Authorization") String token, @PathVariable Long id, @Valid @RequestBody BoardRequestDto requestDto) {
         return boardService.updateBoard(token, id, requestDto);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}/delete")
     public String deleteBoard(@RequestHeader(value = "Authorization") String token, @PathVariable Long id) {
         return boardService.deleteBoard(token, id);
     }
