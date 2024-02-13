@@ -12,8 +12,8 @@ public class UserResponseDto {
     private String info;
 
     public UserResponseDto(User user) {
-        this.email=user.getEmail();
-        this.username=user.getUsername();
-        this.info=user.getInfo();
+        this.email = user.getEmail();
+        this.username = user.getUsername();
+        this.info = user.getInfo();
     }
 }
