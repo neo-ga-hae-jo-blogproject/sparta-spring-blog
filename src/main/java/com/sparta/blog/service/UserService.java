@@ -99,6 +99,9 @@ public class UserService {
         if (!user.getId().equals(id)) {
             throw new UserNotMatchedException();
         }
+        if (userUpdateRequestDto.getOldPassword().equals(userUpdateRequestDto.getNewPassword())) {
+            throw new IllegalArgumentException("새로운 비밀번호는 현재 비밀번호와 같을 수 없습니다.");
+        }
 
         if (!passwordEncoder.matches(userUpdateRequestDto.getOldPassword(), user.getPassword())) {
             throw new BadCredentialsException("현재 비밀번호가 올바르지 않습니다.");
