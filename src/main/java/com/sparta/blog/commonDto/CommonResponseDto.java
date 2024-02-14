@@ -1,4 +1,4 @@
-package com.sparta.blog.dto;
+package com.sparta.blog.commonDto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

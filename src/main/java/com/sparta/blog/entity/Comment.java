@@ -16,19 +16,18 @@ public class Comment {
     @Column(nullable = false)
     private String content;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
-    private Board boards;
+    private Board board;
 
-    public Comment(String content, Board board,User user) {
+    public Comment(String content, Board board, User user) {
         this.content = content;
-        this.boards = board;
-        this.user =user;
+        this.board = board;
+        this.user = user;
     }
 
     public void updateContent(String updateContent) {

@@ -8,6 +8,7 @@ import com.sparta.blog.repository.BoardRepository;
 import com.sparta.blog.repository.CommentRepository;
 import com.sparta.blog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,10 +23,8 @@ import java.util.stream.Collectors;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
     private final CommentRepository commentRepository;
-
-
+    private final JwtUtil jwtUtil;
 
     @Transactional
     public BoardResponseDto createBoard(String accessToken, BoardRequestDto requestDto) {
@@ -49,7 +48,6 @@ public class BoardService {
         Board board = getBoardByUser(user, id);
         board.update(requestDto);
 
-
         return new BoardResponseDto(board);
     }
 
@@ -58,7 +56,7 @@ public class BoardService {
                 .filter(
                         boards -> boards.getId().equals(id))
                 .findFirst()
-                .orElseThrow(() -> new NoSuchElementException("작성자만 삭제/수정 할 수 있습니다.")
+                .orElseThrow(() -> new AccessDeniedException("작성자만 삭제/수정 할 수 있습니다.")
                 );
     }
 
@@ -75,6 +73,7 @@ public class BoardService {
 
     // 게시물 전체 목록 조회
     public List<BoardListResponseDto> getBoardList() {
+
         return boardRepository.findAllByOrderByCreatedAtDesc().stream()
                 .map(board -> new BoardListResponseDto(board, new ArrayList<>()))
                 .collect(Collectors.toList());
@@ -83,9 +82,9 @@ public class BoardService {
     // 특정 게시물 조회
     public BoardListResponseDto getBoardDetail(Long id) {
         Board board = boardRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("글이 존재하지 않습니다.")
+                () -> new NoSuchElementException("게시글이 존재하지 않습니다.")
         );
-        List<CommentResponseDto> commentList = commentRepository.findAllByBoardsId(id)
+        List<CommentResponseDto> commentList = commentRepository.findAllByBoardId(id)
                 .stream()
                 .map(CommentResponseDto::new)
                 .collect(Collectors.toList());

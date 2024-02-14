@@ -1,7 +1,7 @@
 package com.sparta.blog.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.blog.dto.CommonResponseDto;
+import com.sparta.blog.commonDto.CommonResponseDto;
 import com.sparta.blog.security.UserDetailsImpl;
 import com.sparta.blog.service.UserDetailsService;
 import io.jsonwebtoken.Claims;
