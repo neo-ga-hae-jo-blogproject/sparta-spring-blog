@@ -38,9 +38,11 @@ public class CommentService {
     }
 
 
-    public CommentResponseDto updateComment(CommentRequestDto commentRequestDto, Long commentId, String token){
+    public CommentResponseDto updateComment(CommentRequestDto commentRequestDto, Long boardId,Long commentId, String token){
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NoSuchElementException("등록된 댓글이 아닙니다."));
         User user = getUserByToken(token);
+
+        isCommentInBoard(boardId,comment);
 
         //자신이 작성한 댓글인지 아닌지 확인
         isCommentMyselfValidate(user, comment);
@@ -49,13 +51,19 @@ public class CommentService {
         return new CommentResponseDto(comment);
     }
 
-    public void deleteComment(Long commentId, String token){
+
+    public void deleteComment(Long boardId,Long commentId, String token){
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NoSuchElementException("등록된 댓글이 아닙니다."));
         User user = getUserByToken(token);
-
+        isCommentInBoard(boardId,comment);
         isCommentMyselfValidate(user, comment);
 
         commentRepository.delete(comment);
+    }
+    private void isCommentInBoard(Long boardId, Comment comment) {
+        if(Objects.equals(comment.getBoard().getId(), boardId)){
+            throw new AccessDeniedException("게시물의 댓글이 아닙니다.");
+        }
     }
 
     private void isCommentMyselfValidate(User user, Comment comment) {

@@ -24,14 +24,14 @@ public class CommentController {
     }
 
     @PutMapping("/{commentId}/update")
-    public CommentResponseDto updateComment(@RequestHeader(value = "Authorization") String token, @PathVariable(name = "commentId") Long commentId, @RequestBody CommentRequestDto commentRequestDto) {
-        return commentService.updateComment(commentRequestDto, commentId,token);
+    public CommentResponseDto updateComment(@RequestHeader(value = "Authorization") String token, @PathVariable(name = "commentId") Long commentId, @RequestBody CommentRequestDto commentRequestDto, @PathVariable(name = "boardId") Long boardId) {
+        return commentService.updateComment(commentRequestDto, boardId, commentId,token);
     }
 
     @DeleteMapping("/{commentId}/delete")
-    public ResponseEntity<CommonResponseDto> deleteComment(@RequestHeader(value = "Authorization") String token, @PathVariable(name = "commentId") Long commentId) {
+    public ResponseEntity<CommonResponseDto> deleteComment(@RequestHeader(value = "Authorization") String token, @PathVariable(name = "commentId") Long commentId, @PathVariable(name = "boardId") Long boardId) {
         try {
-            commentService.deleteComment(commentId,token);
+            commentService.deleteComment(boardId,commentId,token);
             return ResponseEntity.ok().body(new CommonResponseDto("정상적으로 삭제 되었습니다.", HttpStatus.OK.value()));
         } catch (RejectedExecutionException | IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(new CommonResponseDto(ex.getMessage(), HttpStatus.BAD_REQUEST.value()));
