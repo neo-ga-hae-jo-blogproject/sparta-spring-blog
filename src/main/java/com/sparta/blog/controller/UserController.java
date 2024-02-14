@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,32 +43,14 @@ public class UserController {
     @PostMapping("/signin")
     public ResponseEntity<CommonResponseDto> login(@RequestBody UserLoginRequestDto userLoginRequestDto, HttpServletResponse response, HttpServletRequest request) {
         try {
-            // 이미 로그인된 사용자인지 확인
-            if (userService.isUserLoggedIn(userLoginRequestDto.getEmail(), request)) {
-                return ResponseEntity.badRequest().body(new CommonResponseDto("이미 로그인된 사용자입니다.", HttpStatus.BAD_REQUEST.value()));
-            }
 
             userService.login(userLoginRequestDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
-
         response.setHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(userLoginRequestDto.getEmail()));
 
         return ResponseEntity.ok().body(new CommonResponseDto("로그인 성공", HttpStatus.OK.value()));
-    }
-
-    @PostMapping("/signout")
-    public ResponseEntity<CommonResponseDto> logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-
-        if (session != null && session.getAttribute("loggedInUser") != null) {
-            // 세션에서 로그인 정보를 제거
-            session.removeAttribute("loggedInUser");
-            return ResponseEntity.ok(new CommonResponseDto("로그아웃이 완료되었습니다.", HttpStatus.OK.value()));
-        } else {
-            return ResponseEntity.badRequest().body(new CommonResponseDto("로그인 상태가 아닙니다.", HttpStatus.BAD_REQUEST.value()));
-        }
     }
 
     //조회

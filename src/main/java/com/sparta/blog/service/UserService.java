@@ -7,6 +7,7 @@ import com.sparta.blog.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,12 +40,6 @@ public class UserService {
         String email = userLoginRequestDto.getEmail();
         String password = userLoginRequestDto.getPassword();
 
-        // 현재 세션에서 이미 로그인된 사용자 확인
-        HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("loggedInUser") != null) {
-            throw new IllegalArgumentException("이미 로그인된 사용자입니다.");
-        }
-
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("등록된 유저가 없습니다."));
 
@@ -52,19 +47,6 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        // 로그인이 성공했을 경우, 세션에 로그인 정보 저장
-        session = request.getSession(true);
-        session.setAttribute("loggedInUser", user);
-    }
-
-    public boolean isUserLoggedIn(String userEmail, HttpServletRequest request) {
-        // 세션을 사용하여 로그인 상태 확인
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            User loggedInUser = (User) session.getAttribute("loggedInUser");
-            return loggedInUser != null && loggedInUser.getEmail().equals(userEmail);
-        }
-        return false;
     }
 
     //프로필 조회
