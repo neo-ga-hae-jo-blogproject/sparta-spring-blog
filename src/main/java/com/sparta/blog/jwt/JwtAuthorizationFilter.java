@@ -3,7 +3,7 @@ package com.sparta.blog.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.blog.commonDto.CommonResponseDto;
 import com.sparta.blog.security.UserDetailsImpl;
-import com.sparta.blog.service.UserDetailsService;
+import com.sparta.blog.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,7 +26,7 @@ import java.util.Objects;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
     private final ObjectMapper objectMapper;
 
     @Override

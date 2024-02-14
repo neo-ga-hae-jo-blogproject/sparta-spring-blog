@@ -7,6 +7,7 @@ import com.sparta.blog.jwt.JwtUtil;
 import com.sparta.blog.repository.BoardRepository;
 import com.sparta.blog.repository.CommentRepository;
 import com.sparta.blog.repository.UserRepository;
+import com.sparta.blog.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,9 @@ public class BoardService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public BoardResponseDto createBoard(String accessToken, BoardRequestDto requestDto) {
-        User user = findByToken(accessToken);
+    public BoardResponseDto createBoard(UserDetailsImpl userDetails, BoardRequestDto requestDto) {
+        //User user = findByToken(accessToken);
+        User user = userDetails.getUser();
         Board board = new Board(requestDto, user);
 
         return new BoardResponseDto(boardRepository.save(board));
@@ -43,8 +45,9 @@ public class BoardService {
     }
 
     @Transactional
-    public BoardResponseDto updateBoard(String accessToken, Long id, BoardRequestDto requestDto) {
-        User user = findByToken(accessToken);
+    public BoardResponseDto updateBoard(UserDetailsImpl userDetails, Long id, BoardRequestDto requestDto) {
+        //User user = findByToken(accessToken);
+        User user = userDetails.getUser();
         Board board = getBoardByUser(user, id);
         board.update(requestDto);
 
@@ -61,8 +64,9 @@ public class BoardService {
     }
 
     @Transactional
-    public String deleteBoard(String accessToken, Long id) {
-        User user = findByToken(accessToken);
+    public String deleteBoard(UserDetailsImpl userDetails, Long id) {
+        //User user = findByToken(accessToken);
+        User user = userDetails.getUser();
         Board board = getBoardByUser(user, id);
 
         boardRepository.delete(board);

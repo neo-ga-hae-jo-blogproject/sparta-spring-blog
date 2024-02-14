@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 @Setter
 @Entity
 @NoArgsConstructor
-public class User {
+public class User{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;

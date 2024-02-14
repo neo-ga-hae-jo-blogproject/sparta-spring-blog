@@ -3,9 +3,11 @@ package com.sparta.blog.controller;
 import com.sparta.blog.dto.BoardRequestDto;
 import com.sparta.blog.dto.BoardResponseDto;
 import com.sparta.blog.dto.BoardListResponseDto;
+import com.sparta.blog.security.UserDetailsImpl;
 import com.sparta.blog.service.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -26,17 +28,17 @@ public class BoardController {
     }
 
     @PostMapping("/create")
-    public BoardResponseDto createBoard(@RequestHeader(value = "Authorization") String token, @Valid @RequestBody BoardRequestDto requestDto) {
-        return boardService.createBoard(token, requestDto);
+    public BoardResponseDto createBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @Valid @RequestBody BoardRequestDto requestDto) {
+        return boardService.createBoard(userDetails, requestDto);
     }
 
-    @PutMapping("/{id}/update")
-    public BoardResponseDto updateBoard(@RequestHeader(value = "Authorization") String token, @PathVariable Long id, @Valid @RequestBody BoardRequestDto requestDto) {
-        return boardService.updateBoard(token, id, requestDto);
+    @PostMapping("/{id}/update")
+    public BoardResponseDto updateBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id, @Valid @RequestBody BoardRequestDto requestDto) {
+        return boardService.updateBoard(userDetails, id, requestDto);
     }
 
     @DeleteMapping("/{id}/delete")
-    public String deleteBoard(@RequestHeader(value = "Authorization") String token, @PathVariable Long id) {
-        return boardService.deleteBoard(token, id);
+    public String deleteBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
+        return boardService.deleteBoard(userDetails, id);
     }
 }
