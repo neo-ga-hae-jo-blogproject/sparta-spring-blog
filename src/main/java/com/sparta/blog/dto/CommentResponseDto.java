@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class CommentResponseDto {
     private String content;
-    private String writer;
+    private String username;
 
     public CommentResponseDto(Comment comment) {
         this.content = comment.getContent();
-        this.writer = comment.getUser().getUsername();
+        this.username = comment.getUser().getUsername();
     }
 }

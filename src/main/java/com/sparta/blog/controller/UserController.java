@@ -1,16 +1,14 @@
 package com.sparta.blog.controller;
 
+import com.sparta.blog.commonDto.CommonResponseDto;
 import com.sparta.blog.dto.*;
-import com.sparta.blog.entity.User;
 import com.sparta.blog.jwt.JwtUtil;
 import com.sparta.blog.service.UserService;
-import jakarta.persistence.Id;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -24,30 +22,30 @@ public class UserController {
     private final JwtUtil jwtUtil;
     
 
-    @PostMapping("/signup")
-    public ResponseEntity<Object> signup(@Valid @RequestBody UserRequestDto userRequestDto, BindingResult bindingResult) {
+    @PostMapping("/sign-up")
+    public ResponseEntity<Object> signUp(@Valid @RequestBody UserRequestDto userRequestDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(new CommonResponseDto("이메일 형식이 유효하지 않습니다.", HttpStatus.BAD_REQUEST.value()));
         }
         try {
-            userService.signup(userRequestDto);
+            userService.signUp(userRequestDto);
             return ResponseEntity.status(HttpStatus.CREATED.value())
                     .body(new CommonResponseDto("회원가입 성공", HttpStatus.CREATED.value()));
         } catch (IllegalArgumentException exception) {
-            return ResponseEntity.badRequest().body(new CommonResponseDto("중복된 이메일 입니다.", HttpStatus.BAD_REQUEST.value()));
+            return ResponseEntity.badRequest().body(new CommonResponseDto("중복된 이메일입니다.", HttpStatus.BAD_REQUEST.value()));
         }
     }
 
 
-    @PostMapping("/signin")
-    public ResponseEntity<CommonResponseDto> login(@RequestBody UserLoginRequestDto userLoginRequestDto, HttpServletResponse response, HttpServletRequest request) {
+    @PostMapping("/sign-in")
+    public ResponseEntity<CommonResponseDto> signIn(@RequestBody UserLoginRequestDto userLoginRequestDto, HttpServletResponse response, HttpServletRequest request) {
         try {
             // 이미 로그인된 사용자인지 확인
             if (userService.isUserLoggedIn(userLoginRequestDto.getEmail(), request)) {
                 return ResponseEntity.badRequest().body(new CommonResponseDto("이미 로그인된 사용자입니다.", HttpStatus.BAD_REQUEST.value()));
             }
 
-            userService.login(userLoginRequestDto);
+            userService.signIn(userLoginRequestDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(new CommonResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
@@ -57,8 +55,8 @@ public class UserController {
         return ResponseEntity.ok().body(new CommonResponseDto("로그인 성공", HttpStatus.OK.value()));
     }
 
-    @PostMapping("/signout")
-    public ResponseEntity<CommonResponseDto> logout(HttpServletRequest request) {
+    @PostMapping("/sign-out")
+    public ResponseEntity<CommonResponseDto> signOut(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
 
         if (session != null && session.getAttribute("loggedInUser") != null) {
@@ -71,24 +69,24 @@ public class UserController {
     }
 
     //조회
-    @GetMapping("/{userId}")
-    public UserResponseDto getUserList(@PathVariable Long userId){
-        return userService.getUserList(userId);
+    @GetMapping("/{id}")
+    public UserResponseDto getUserList(@PathVariable Long id){
+        return userService.getUserList(id);
     }
     // info 수정
-    @PutMapping("/{userId}/update-info")
+    @PutMapping("/{id}/update-info")
     public UserResponseDto updateUserInfo(@RequestHeader("Authorization") String token,
-                                          @PathVariable Long userId,
+                                          @PathVariable Long id,
                                           @Valid @RequestBody UserRequestDto userRequestDto) {
-        return userService.updateUserInfo(token, userId, userRequestDto);
+        return userService.updateUserInfo(token, id, userRequestDto);
     }
 
     // 비밀번호 수정
-    @PutMapping("/{userId}/update-password")
+    @PutMapping("/{id}/update-password")
     public UserResponseDto updateUserPassword(@RequestHeader("Authorization") String token,
-                                                     @PathVariable Long userId,
+                                                     @PathVariable Long id,
                                                      @Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
 
-        return userService.updateUserPassword(token,userId,userUpdateRequestDto);
+        return userService.updateUserPassword(token, id, userUpdateRequestDto);
     }
 }
