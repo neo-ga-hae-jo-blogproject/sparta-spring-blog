@@ -42,8 +42,6 @@ public class CommentService {
     public CommentResponseDto updateComment(CommentRequestDto commentRequestDto, Long boardId,Long commentId,UserDetailsImpl userDetails){
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NoSuchElementException("등록된 댓글이 아닙니다."));
         User user = userDetails.getUser();
-        System.out.println("comment.getBoard().getId() = " + comment.getBoard().getId());
-        System.out.println("boardId = " + boardId);
         isCommentInBoard(boardId,comment);
 
         //자신이 작성한 댓글인지 아닌지 확인
@@ -69,7 +67,7 @@ public class CommentService {
     }
 
     private void isCommentMyselfValidate(User user, Comment comment) {
-        if(!(user.equals(comment.getUser()))){
+        if(!(user.getId().equals(comment.getUser().getId()))){
             throw new AccessDeniedException("자신이 작성한 댓글이 아닙니다.");
         }
     }

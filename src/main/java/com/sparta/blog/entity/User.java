@@ -31,10 +31,10 @@ public class User{
     @Column(nullable = false)
     private String info;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     private final List<Board> boards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     private final List<Comment> commentList = new ArrayList<>();
     @Builder
     public User(String email, String password, String username, String info) {

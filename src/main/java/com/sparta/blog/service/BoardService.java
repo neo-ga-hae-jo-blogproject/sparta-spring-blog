@@ -26,6 +26,7 @@ public class BoardService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final JwtUtil jwtUtil;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Transactional
     public BoardResponseDto createBoard(UserDetailsImpl userDetails, BoardRequestDto requestDto) {
@@ -48,16 +49,16 @@ public class BoardService {
     public BoardResponseDto updateBoard(UserDetailsImpl userDetails, Long id, BoardRequestDto requestDto) {
         //User user = findByToken(accessToken);
         User user = userDetails.getUser();
+        System.out.println("email : " + user.getEmail());
         Board board = getBoardByUser(user, id);
         board.update(requestDto);
 
         return new BoardResponseDto(board);
     }
-
     private Board getBoardByUser(User user, Long id) {
         return user.getBoards().stream()
                 .filter(
-                        boards -> boards.getId().equals(id))
+                        board -> board.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new AccessDeniedException("작성자만 삭제/수정 할 수 있습니다.")
                 );
