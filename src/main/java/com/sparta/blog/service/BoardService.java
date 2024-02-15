@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -46,29 +47,22 @@ public class BoardService {
     }
 
     @Transactional
-    public BoardResponseDto updateBoard(UserDetailsImpl userDetails, Long id, BoardRequestDto requestDto) {
+    public BoardResponseDto updateBoard(UserDetailsImpl userDetails, Long boardId, BoardRequestDto requestDto) {
         //User user = findByToken(accessToken);
-        User user = userDetails.getUser();
-        System.out.println("email : " + user.getEmail());
-        Board board = getBoardByUser(user, id);
+        Long userId = userDetails.getUser().getId();
+        //System.out.println("email : " + user.getEmail());
+        Board board = getBoardByUserId(userId, boardId);
         board.update(requestDto);
 
         return new BoardResponseDto(board);
     }
-    private Board getBoardByUser(User user, Long id) {
-        return user.getBoards().stream()
-                .filter(
-                        board -> board.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new AccessDeniedException("작성자만 삭제/수정 할 수 있습니다.")
-                );
-    }
+
 
     @Transactional
     public String deleteBoard(UserDetailsImpl userDetails, Long id) {
         //User user = findByToken(accessToken);
-        User user = userDetails.getUser();
-        Board board = getBoardByUser(user, id);
+        Long userId = userDetails.getUser().getId();
+        Board board = getBoardByUserId(userId, id);
 
         boardRepository.delete(board);
 
@@ -94,6 +88,15 @@ public class BoardService {
                 .map(CommentResponseDto::new)
                 .collect(Collectors.toList());
         return new BoardListResponseDto(board, commentList);
+    }
+    private Board getBoardByUserId(Long userId,Long boardId){
+        User user = userRepository.findById(userId).orElseThrow();
+        Board board = boardRepository.findById(boardId).orElseThrow();
+        List<Board> boards = user.getBoards();
+        if(!boards.contains(board)) {
+            throw new AccessDeniedException("작성자만 삭제/수정 할 수 있습니다.");
+        }
+        return board;
     }
 }
 
