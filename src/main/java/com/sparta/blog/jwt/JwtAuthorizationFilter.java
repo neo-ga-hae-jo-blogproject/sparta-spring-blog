@@ -3,7 +3,7 @@ package com.sparta.blog.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.blog.commonDto.CommonResponseDto;
 import com.sparta.blog.security.UserDetailsImpl;
-import com.sparta.blog.service.UserDetailsService;
+import com.sparta.blog.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -26,7 +27,7 @@ import java.util.Objects;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -41,7 +42,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 // token 검증 -> 인증
                 String email = info.getSubject();
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
-                UserDetailsImpl userDetails = userDetailsService.getUserDetails(email);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
                 Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 context.setAuthentication(authentication);
                 SecurityContextHolder.setContext(context);

@@ -3,8 +3,8 @@ package com.sparta.blog.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.blog.jwt.JwtAuthorizationFilter;
 import com.sparta.blog.jwt.JwtUtil;
-import com.sparta.blog.service.UserDetailsService;
-import jakarta.servlet.http.HttpServletResponse;
+
+import com.sparta.blog.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -26,7 +27,7 @@ public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
 
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     private final ObjectMapper objectMapper;
 
@@ -59,7 +60,6 @@ public class WebSecurityConfig {
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
                         .requestMatchers("/api/**").permitAll() // '/api/users/'로 시작하는 요청 모두 접근 허가
-                        .requestMatchers("/api/boards/**").permitAll() // '/api/users/'로 시작하는 요청 모두 접근 허가
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 
