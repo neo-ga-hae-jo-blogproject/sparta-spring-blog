@@ -25,12 +25,12 @@ public class CommentController {
         return commentService.review(commentRequestDto, boardId, userDetails);
     }
 
-    @PutMapping("/{commentId}/update")
+    @PutMapping("/{commentId}")
     public CommentResponseDto updateComment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable(name = "commentId") Long commentId, @RequestBody CommentRequestDto commentRequestDto, @PathVariable(name = "boardId") Long boardId) {
         return commentService.updateComment(commentRequestDto, boardId, commentId,userDetails);
     }
 
-    @DeleteMapping("/{commentId}/delete")
+    @DeleteMapping("/{commentId}")
     public ResponseEntity<CommonResponseDto> deleteComment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable(name = "commentId") Long commentId, @PathVariable(name = "boardId") Long boardId) {
         try {
             commentService.deleteComment(boardId,commentId,userDetails);

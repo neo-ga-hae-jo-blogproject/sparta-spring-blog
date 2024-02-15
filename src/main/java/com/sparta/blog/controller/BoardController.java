@@ -27,17 +27,17 @@ public class BoardController {
      return boardService.getBoardDetail(id);
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public BoardResponseDto createBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @Valid @RequestBody BoardRequestDto requestDto) {
         return boardService.createBoard(userDetails, requestDto);
     }
 
-    @PostMapping("/{id}/update")
+    @PutMapping("/{id}")
     public BoardResponseDto updateBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id, @Valid @RequestBody BoardRequestDto requestDto) {
         return boardService.updateBoard(userDetails, id, requestDto);
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public String deleteBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
         return boardService.deleteBoard(userDetails, id);
     }
