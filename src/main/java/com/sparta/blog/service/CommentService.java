@@ -30,7 +30,8 @@ public class CommentService {
 
 
     public CommentResponseDto review(CommentRequestDto commentRequestDto, Long boardId, UserDetailsImpl userDetails){
-        User user = userDetails.getUser();
+        Long userId = userDetails.getUser().getId();
+        User user = userRepository.findById(userId).orElseThrow();
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new NoSuchElementException("없는 게시물 입니다."));
 
         Comment comment = new Comment(commentRequestDto.getContent(), board, user);
