@@ -25,8 +25,6 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
-    private final JwtUtil jwtUtil;
-
 
 
     public CommentResponseDto review(CommentRequestDto commentRequestDto, Long boardId, UserDetailsImpl userDetails){

@@ -29,16 +29,16 @@ public class BoardController {
 
     @PostMapping
     public BoardResponseDto createBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @Valid @RequestBody BoardRequestDto requestDto) {
-        return boardService.createBoard(userDetails, requestDto);
+        return boardService.createBoard(userDetails.getUser(), requestDto);
     }
 
     @PutMapping("/{id}")
     public BoardResponseDto updateBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id, @Valid @RequestBody BoardRequestDto requestDto) {
-        return boardService.updateBoard(userDetails, id, requestDto);
+        return boardService.updateBoard(userDetails.getUser(), id, requestDto);
     }
 
     @DeleteMapping("/{id}")
     public String deleteBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
-        return boardService.deleteBoard(userDetails, id);
+        return boardService.deleteBoard(userDetails.getUser(), id);
     }
 }
